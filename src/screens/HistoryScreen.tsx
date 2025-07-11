@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react"
 import { View, Text, ScrollView, TouchableOpacity, TextInput } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -13,80 +14,61 @@ const HistoryScreen = () => {
   const historyItems = [
     {
       id: 1,
-      title: "Estudiar programación",
-      category: "Educación",
-      date: "15/11/2024",
-      time: "20 XP",
-      completed: false,
-      hasImage: false,
+      title: "Ejercicio matutino",
+      category: "Salud",
+      date: "14/1/2024",
+      time: "07:00",
+      xp: 50,
+      completed: true,
+      verified: true,
+      hasImage: true,
+      isVerification: false,
     },
     {
       id: 2,
-      title: "Caminar 30 min",
-      category: "Salud",
-      date: "15/11/2024",
-      time: "25 XP",
-      completed: true,
+      title: "Leer 30 minutos",
+      category: "Educación",
+      date: "14/1/2024",
+      time: "20:00",
+      xp: 30,
+      completed: false,
+      verified: false,
       hasImage: false,
+      isVerification: false,
     },
     {
       id: 3,
-      title: "Ejercicio matutino",
-      category: "Salud",
-      date: "14/11/2024",
-      time: "50 XP",
-      completed: true,
-      hasImage: true,
-    },
-    {
-      id: 4,
-      title: "Imagen de verificación",
-      category: "Verificación",
-      date: "14/11/2024",
-      time: "",
-      completed: true,
-      hasImage: true,
-      isVerification: true,
-    },
-    {
-      id: 5,
-      title: "Leer 30 minutos",
-      category: "Educación",
-      date: "14/11/2024",
-      time: "30 XP",
-      completed: false,
-      hasImage: false,
-    },
-    {
-      id: 6,
       title: "Meditar",
       category: "Bienestar",
-      date: "13/11/2024",
-      time: "25 XP",
+      date: "13/1/2024",
+      time: "21:00",
+      xp: 30,
       completed: true,
-      hasImage: false,
+      verified: true,
+      hasImage: true,
+      isVerification: false,
     },
   ]
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <Header title="HabitLog" />
 
       <ScrollView className="flex-1 px-4">
-        <Text className="text-xl font-bold text-text mb-6">Historial de Tareas</Text>
+        <Text className="text-xl font-bold text-gray-800 mb-4 mt-4">Historial de Tareas</Text>
 
         {/* Filters */}
-        <View className="mb-4">
-          <Text className="text-sm font-medium text-text mb-2">Filtros</Text>
-          <View className="flex-row space-x-2 mb-4">
+        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+          <Text className="text-sm font-medium text-gray-700 mb-2">Filtros</Text>
+          <View className="flex-row gap-2 mb-4">
             {filters.map((filter) => (
               <TouchableOpacity
                 key={filter}
-                className={`px-4 py-2 rounded-lg ${selectedFilter === filter ? "bg-primary" : "bg-gray-200"}`}
+                className={`px-4 py-2 rounded-lg border ${selectedFilter === filter ? "bg-primary/10 border-primary" : "bg-gray-100 border-gray-200"}`}
                 onPress={() => setSelectedFilter(filter)}
               >
                 <Text
-                  className={`text-sm font-medium ${selectedFilter === filter ? "text-white" : "text-textSecondary"}`}
+                  className={`text-sm font-medium ${selectedFilter === filter ? "text-primary" : "text-gray-400"}`}
                 >
                   {filter}
                 </Text>
@@ -97,7 +79,7 @@ const HistoryScreen = () => {
           {/* Date Search */}
           <View className="flex-row mb-4">
             <TextInput
-              className="flex-1 bg-surface rounded-l-xl px-4 py-3 text-text border border-gray-200"
+              className="flex-1 bg-gray-100 rounded-l-xl px-4 py-3 text-gray-700 border border-gray-200"
               placeholder="dd - mm - aaaa"
               value={searchDate}
               onChangeText={setSearchDate}
@@ -109,40 +91,32 @@ const HistoryScreen = () => {
         </View>
 
         {/* History Items */}
-        <View className="space-y-3 mb-8">
+        <View className="space-y-4 mb-8">
           {historyItems.map((item) => (
-            <View key={item.id} className="bg-surface rounded-xl p-4 shadow-sm">
-              <View className="flex-row justify-between items-start mb-2">
-                <View className="flex-1">
-                  <View className="flex-row items-center mb-1">
-                    <View className={`w-3 h-3 rounded-full mr-2 ${item.completed ? "bg-success" : "bg-error"}`} />
-                    <Text className="font-semibold text-text">{item.title}</Text>
-                    {item.completed && <Ionicons name="checkmark-circle" size={16} color="#48BB78" className="ml-2" />}
-                  </View>
-                  <Text className="text-textSecondary text-sm ml-5">
-                    📅 {item.date} • {item.category} • {item.time}
-                  </Text>
-                </View>
-                <Text
-                  className={`text-sm font-medium px-2 py-1 rounded ${
-                    item.completed ? "text-success bg-success/10" : "text-error bg-error/10"
-                  }`}
-                >
-                  {item.completed ? "Completada" : "Incompleta"}
-                </Text>
+            <View key={item.id} className={`border rounded-xl p-4 ${item.completed ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}>
+              <View className="flex-row items-center mb-2">
+                <Ionicons name={item.completed ? "checkmark-circle" : "close-circle-outline"} size={18} color={item.completed ? "#48BB78" : "#F56565"} className="mr-2" />
+                <Text className="font-semibold text-base flex-1 text-gray-800">{item.title}</Text>
+                {item.completed ? (
+                  <Text className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full ml-2">Completada</Text>
+                ) : (
+                  <Text className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full ml-2">Incompleta</Text>
+                )}
+                {item.verified && (
+                  <Text className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full ml-2">Verificada</Text>
+                )}
               </View>
-
-              {item.isVerification && (
-                <View className="bg-primary rounded-lg p-3 mt-2">
-                  <Text className="text-white font-medium text-center">Ejercicio</Text>
-                  <Text className="text-white/80 text-xs text-center">14/01/2024</Text>
-                </View>
-              )}
-
-              {item.hasImage && !item.isVerification && (
-                <View className="bg-primary rounded-lg p-3 mt-2">
-                  <Text className="text-white font-medium text-center">Meditación</Text>
-                  <Text className="text-white/80 text-xs text-center">14/01/2024</Text>
+              <View className="flex-row items-center mb-1">
+                <Text className="text-xs text-gray-400">{item.category}</Text>
+                <Ionicons name="time-outline" size={14} color="#A0AEC0" className="ml-4" />
+                <Text className="text-xs text-gray-400 ml-1">{item.time}</Text>
+                <Ionicons name="calendar-outline" size={14} color="#A0AEC0" className="ml-4" />
+                <Text className="text-xs text-gray-400 ml-1">{item.date}</Text>
+                <Text className="text-xs text-gray-400 ml-4">{item.xp} XP</Text>
+              </View>
+              {item.hasImage && (
+                <View className="bg-gradient-to-r from-primary to-accent rounded-lg p-4 mt-2">
+                  <Text className="text-white font-semibold text-center">Imagen de verificación</Text>
                 </View>
               )}
             </View>

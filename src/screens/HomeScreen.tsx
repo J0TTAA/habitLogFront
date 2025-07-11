@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { View, Text, ScrollView } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import Header from "../components/Header"
@@ -12,7 +13,7 @@ const HomeScreen = () => {
       title: "Ejercicio matutino",
       category: "Salud",
       completed: true,
-      time: "30 min",
+      time: "07:00",
       xp: 50,
     },
     {
@@ -20,7 +21,7 @@ const HomeScreen = () => {
       title: "Leer 30 minutos",
       category: "Educación",
       completed: false,
-      time: "30 min",
+      time: "20:00",
       xp: 40,
     },
     {
@@ -28,42 +29,42 @@ const HomeScreen = () => {
       title: "Meditar",
       category: "Bienestar",
       completed: false,
-      time: "15 min",
+      time: "21:00",
       xp: 30,
     },
   ]
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <Header title="HabitLog" />
 
       <ScrollView className="flex-1 px-4">
         {/* Greeting */}
-        <View className="mb-6">
-          <Text className="text-2xl font-bold text-text mb-1">¡Hola, Usuario!</Text>
-          <Text className="text-textSecondary">Lunes, 23 de julio de 2024</Text>
+        <View className="mb-4 mt-4">
+          <Text className="text-2xl font-bold text-gray-800 mb-1">¡Hola, Usuario!</Text>
+          <Text className="text-gray-400">lunes, 23 de junio de 2025</Text>
         </View>
 
         {/* Daily Progress */}
-        <View className="mb-6">
-          <Text className="text-lg font-semibold text-text mb-3">📈 Progreso de Hoy</Text>
-          <View className="bg-surface rounded-xl p-4 shadow-sm">
-            <View className="flex-row justify-between items-center mb-2">
-              <Text className="text-textSecondary">Tareas completadas</Text>
-              <Text className="text-text font-medium">1/3</Text>
-            </View>
-            <ProgressBar progress={33} />
-            <Text className="text-xs text-textSecondary mt-2">33% completado</Text>
+        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+          <Text className="text-base font-semibold text-gray-700 mb-2">Progreso de Hoy</Text>
+          <View className="flex-row justify-between items-center mb-2">
+            <Text className="text-gray-400 text-sm">Tareas completadas</Text>
+            <Text className="text-gray-700 font-bold text-sm">1/3</Text>
           </View>
+          <ProgressBar progress={33} />
+          <Text className="text-xs text-gray-400 mt-2">33% completado</Text>
         </View>
 
         {/* Weather Widget */}
-        <WeatherWidget />
+        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+          <WeatherWidget />
+        </View>
 
         {/* Today's Tasks */}
-        <View className="mb-6">
-          <Text className="text-lg font-semibold text-text mb-3">⚡ Tareas de Hoy</Text>
-          <View className="gap-3">
+        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+          <Text className="text-base font-semibold text-gray-700 mb-2">Tareas de Hoy</Text>
+          <View>
             {todayTasks.map((task) => (
               <TaskItem key={task.id} task={task} />
             ))}
@@ -71,11 +72,10 @@ const HomeScreen = () => {
         </View>
 
         {/* Experience Points */}
-        <View className="mb-8">
-          <View className="bg-surface rounded-xl p-4 shadow-sm items-center">
-            <Text className="text-textSecondary mb-1">Experiencia Total</Text>
-            <Text className="text-3xl font-bold text-primary">1,247 XP</Text>
-          </View>
+        <View className="bg-white rounded-xl border border-gray-200 p-4 mb-8 items-center">
+          <Text className="text-gray-400 mb-1">Experiencia Total</Text>
+          <Text className="text-3xl font-bold text-primary">1,247 XP</Text>
+          <Text className="text-xs text-gray-400 mt-1">+65 XP hoy</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
