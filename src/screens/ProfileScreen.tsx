@@ -1,11 +1,25 @@
 // @ts-nocheck
-import { View, Text, ScrollView } from "react-native"
+import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import Header from "../components/Header"
 import ProgressBar from "../components/ProgressBar"
+import { useAuth } from "../contexts/AuthContext"
 
 const ProfileScreen = () => {
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Cerrar Sesión',
+      '¿Estás seguro de que quieres cerrar sesión?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Cerrar Sesión', style: 'destructive', onPress: logout },
+      ]
+    );
+  };
+
   const weeklyProgress = [
     { day: "L", completed: true },
     { day: "M", completed: true },
@@ -48,12 +62,15 @@ const ProfileScreen = () => {
         {/* Profile Header */}
         <View className="items-center mb-6">
           <View className="w-20 h-20 bg-primary rounded-full items-center justify-center mb-3">
-            <Text className="text-white text-2xl font-bold">H</Text>
+            <Text className="text-white text-2xl font-bold">
+              {user?.nickname?.charAt(0)?.toUpperCase() || 'U'}
+            </Text>
           </View>
           <View className="flex-row items-center">
-            <Text className="text-xl font-bold text-text mr-2">Habitante Pro</Text>
+            <Text className="text-xl font-bold text-text mr-2">{user?.nickname || 'Usuario'}</Text>
             <Ionicons name="checkmark-circle" size={20} color="#48BB78" />
           </View>
+          <Text className="text-textSecondary text-sm mt-1">{user?.email}</Text>
         </View>
 
         {/* Stats */}
@@ -117,7 +134,7 @@ const ProfileScreen = () => {
         </View>
 
         {/* Recent Achievements */}
-        <View className="mb-8">
+        <View className="mb-6">
           <Text className="text-lg font-semibold text-text mb-3">🏆 Logros Recientes</Text>
           <View className="space-y-3">
             {achievements.map((achievement) => (
@@ -136,6 +153,18 @@ const ProfileScreen = () => {
               </View>
             ))}
           </View>
+        </View>
+
+        {/* Logout Button */}
+        <View className="mb-8">
+          <TouchableOpacity
+            className="bg-red-500 rounded-xl py-4"
+            onPress={handleLogout}
+          >
+            <Text className="text-white text-center font-semibold text-lg">
+              Cerrar Sesión
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

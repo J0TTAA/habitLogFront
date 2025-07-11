@@ -6,12 +6,16 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createStackNavigator } from "@react-navigation/stack"
 import { StatusBar } from "expo-status-bar"
 import { Ionicons } from "@expo/vector-icons"
+import { ActivityIndicator, View } from "react-native"
 
+import { AuthProvider, useAuth } from "./src/contexts/AuthContext"
 import HomeScreen from "./src/screens/HomeScreen"
 import TasksScreen from "./src/screens/TasksScreen"
 import HistoryScreen from "./src/screens/HistoryScreen"
 import ProfileScreen from "./src/screens/ProfileScreen"
 import ClimateScreen from "./src/screens/ClimateScreen"
+import LoginScreen from "./src/screens/LoginScreen"
+import RegisterScreen from "./src/screens/RegisterScreen"
 import CreateTaskModal from "./src/components/CreateTaskModal"
 import VerifyTaskModal from "./src/components/VerifyTaskModal"
 
@@ -83,15 +87,44 @@ function TabNavigator() {
   )
 }
 
-export default function App() {
+function AppContent() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-50">
+        <ActivityIndicator size="large" color="#4A9B8E" />
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={TabNavigator} />
-        <Stack.Screen name="CreateTask" component={CreateTaskModal} options={{ presentation: "modal" }} />
-        <Stack.Screen name="VerifyTask" component={VerifyTaskModal} options={{ presentation: "modal" }} />
+        {user ? (
+          // Usuario autenticado
+          <>
+            <Stack.Screen name="Main" component={TabNavigator} />
+            <Stack.Screen name="CreateTask" component={CreateTaskModal} options={{ presentation: "modal" }} />
+            <Stack.Screen name="VerifyTask" component={VerifyTaskModal} options={{ presentation: "modal" }} />
+          </>
+        ) : (
+          // Usuario no autenticado
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
 }
